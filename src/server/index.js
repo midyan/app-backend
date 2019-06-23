@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 
+const passport = require('./passport')
 const busboy = require('express-busboy')
 const helmet = require('helmet')
 
@@ -19,6 +20,8 @@ module.exports = (port, isBootstrapped) =>
             }
 
             const app = express()
+
+            passport.setupAll()
 
             app.disable('x-powered-by')
 
