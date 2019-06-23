@@ -1,0 +1,80 @@
+{
+    "name": "sup",
+    "version": "1.0.0",
+    "description": "Recipes App Backend",
+    "main": "server.js",
+    "scripts": {
+        "clean-install": "touch package-lock.json && rm package-lock.json && rm -rf node_modules && npm install",
+        "node": "node",
+        "nodemon": "nodemon",
+        "worker": "npm run node -- worker.js",
+        "workermon": "npm run nodemon -- --watch src --watch worker.js worker.js",
+        "ava": "npm run node -- ./node_modules/.bin/ava --verbose",
+        "test": "node ./node_modules/.bin/ava --verbose",
+        "server": "npm run nodemon -- --watch src server.js",
+        "start": "concurrently -n \"server\"  -c \"blue.bold\" \"npm run server\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/midyan/recipes-app-backend.git"
+    },
+    "keywords": [
+        "recipe",
+        "app",
+        "save"
+    ],
+    "author": "Yan Nunes",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/midyan/recipes-app-backend/issues"
+    },
+    "homepage": "https://github.com/midyan/recipes-app-backend#readme",
+    "devDependencies": {
+        "ava": "^2.1.0",
+        "concurrently": "^4.1.0",
+        "mongodb-memory-server": "^5.1.5",
+        "babel-eslint": "^8.0.2",
+        "eslint": "^4.19.1",
+        "eslint-config-standard": "^11.0.0",
+        "eslint-plugin-import": "^2.9.0",
+        "eslint-plugin-node": "^6.0.1",
+        "eslint-plugin-promise": "^3.6.0",
+        "eslint-plugin-standard": "^3.0.1",
+        "nodemon": "^1.19.1"
+    },
+    "dependencies": {
+        "axios": "^0.19.0",
+        "cors": "^2.8.5",
+        "dateonly": "^1.2.0",
+        "express": "^4.17.1",
+        "express-busboy": "^7.0.1",
+        "express-sslify": "^1.2.0",
+        "helmet": "^3.18.0",
+        "install": "^0.12.2",
+        "moment": "^2.24.0",
+        "mongoose": "^5.6.0",
+        "mongoose-dateonly": "^1.0.6",
+        "morgan": "^1.9.1",
+        "node-gyp": "^5.0.1",
+        "npm": "^6.9.0",
+        "shortid": "^2.2.14",
+        "throng": "^4.0.0"
+    },
+    "ava": {
+        "babel": false,
+        "compileEnhancements": false,
+        "timeout": "30s",
+        "files": [
+            "./**/*.test.js"
+        ]
+    },
+    "nodemonConfig": {
+        "delay": "1500",
+        "ignore": [
+            "src/utils/i18n/*"
+        ]
+    },
+    "engines": {
+        "node": "12.4.0"
+    }
+}
