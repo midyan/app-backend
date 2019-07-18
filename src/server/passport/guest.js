@@ -6,7 +6,7 @@ const { getUserIdentity } = require('../../utils/identity')
 const config = require('../../config')
 
 const jwt = require('jsonwebtoken')
-const UserModel = require('../../../models/User')
+const UserModel = require('../../models/User')
 
 module.exports = {
     authFields: {
