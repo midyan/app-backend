@@ -6,6 +6,7 @@ module.exports = env => {
     let sessionSecret = setDefaultValue(process.env.SUP_SESSION_SECRET, '1234')
 
     let apiUrl = setDefaultValue(process.env.API_URL, 'http://localhost:3000')
+    let jwt_secret = setDefaultValue(process.env.JWT_TOKEN, 'test1234')
 
     switch (env) {
         case 'test': // SAME AS DEVELOPMENT
@@ -17,7 +18,7 @@ module.exports = env => {
             apiUrl = process.env.API_URL
             sessionKey = process.env.SUP_SESSION_KEY
             sessionSecret = process.env.SUP_SESSION_SECRET
-
+            jwt_secret = process.env.JWT_TOKEN
             break
 
         default:
@@ -25,6 +26,7 @@ module.exports = env => {
     }
 
     return {
+        jwt_secret,
         sessionKey,
         sessionSecret,
 

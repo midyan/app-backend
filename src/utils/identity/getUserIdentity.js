@@ -1,3 +1,5 @@
+const { makeLean } = require('../object')
+
 module.exports = async function getUserIdentity(user) {
-    return user
+    return makeLean(user)
 }

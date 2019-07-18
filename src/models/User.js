@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-    type: {
+    user_type: {
         type: String,
         enum: [
             'user',
@@ -19,14 +19,14 @@ const UserSchema = new mongoose.Schema({
     first_name: {
         type: String,
         required: function() {
-            return this.type !== 'user'
+            return this.type === 'user'
         },
     },
 
     last_name: {
         type: String,
         required: function() {
-            return this.type !== 'user'
+            return this.type === 'user'
         },
     },
     google_id: String,

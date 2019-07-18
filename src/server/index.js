@@ -47,6 +47,7 @@ module.exports = (port, isBootstrapped) =>
             // app.use('/api', require('./api')())
 
             app.use('/', require('./public'))
+            app.use('/auth', require('./authentication'))
 
             app.use('*', (req, res) => {
                 res.status(404).send()

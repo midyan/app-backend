@@ -1,3 +1,5 @@
+const uuidv4 = require('uuid/v4')
+
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 
@@ -69,4 +71,15 @@ module.exports.login = async function login(req, res) {
     }
 
     return passport.authenticate('local', { session: false }, doAuthentication)(req, res)
+}
+
+module.exports.signup = async function signup() {
+    // TODO Rate limit here, because yeah
+    const user = await new UserModel({ user_type: 'guest' }).save()
+
+    const identity = await getUserIdentity(user)
+
+    const token = jwt.sign(identity, config.jwt_secret)
+
+    return { token }
 }

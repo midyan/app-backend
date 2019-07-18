@@ -1,3 +1,7 @@
+const makeLean = require('./makeLean')
 const setDefaultValue = require('./setDefaultValue')
 
-module.exports = { setDefaultValue }
+module.exports = {
+    makeLean,
+    setDefaultValue,
+}
