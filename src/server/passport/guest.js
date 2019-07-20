@@ -44,7 +44,7 @@ module.exports.setup = function guestSetup() {
     return passport.use(localStrategy)
 }
 
-module.exports.login = async function login(req, res) {
+module.exports.login = function login(req, res) {
     function doAuthentication(err, user) {
         if (err || !user)
             return res.status(400).json({
@@ -76,6 +76,8 @@ module.exports.login = async function login(req, res) {
 module.exports.signup = async function signup() {
     // TODO Rate limit here, because yeah
     const user = await new UserModel({ user_type: 'guest' }).save()
+
+    user.setDefaultValues()
 
     const identity = await getUserIdentity(user)
 

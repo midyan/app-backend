@@ -7,6 +7,7 @@ test.before(async t => {
 
     t.context = {}
 
+    t.context.Server = require('./server')
     t.context.Request = require('./request')
 })
 

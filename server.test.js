@@ -1,19 +1,25 @@
 const test = require('./src/utils/test')
 
-const server = require('./server')
-
 test('server should start without errors', async t => {
-    await t.notThrowsAsync(server(9999))
+    const { Server } = t.context
+
+    const server = new Server(9000)
+
+    t.truthy(server.server_id)
+
+    await t.notThrowsAsync(server.start())
+
+    await t.notThrowsAsync(server.stop())
 })
 
 test('should signup as guest correctly', async t => {
-    const { Request } = t.context
+    const { Request, Server } = t.context
 
-    const PORT = 8000
+    const server = new Server(8000)
 
-    await server(PORT)
+    await server.start()
 
-    const request = new Request(`http://localhost:${PORT}`)
+    const request = new Request(`http://localhost:${server.PORT}`)
 
     const { status, data } = await request.post('/auth/guest/signup')
 
