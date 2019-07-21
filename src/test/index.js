@@ -5,8 +5,12 @@ const Server = require('../Server')
 test.beforeEach(async t => {
     t.context = {}
     t.context.getServer = getServer
-    t.context.useTunnel = () => {}
+    t.context.setupBaseData = setupBaseData
 })
+
+async function setupBaseData(server) {
+    console.log('@@server', server)
+}
 
 async function getServer(PORT) {
     const server = new Server(PORT)

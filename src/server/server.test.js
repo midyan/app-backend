@@ -11,4 +11,6 @@ test('start server -> ping request -> shutdown server', async t => {
     t.truthy(server.models)
     t.truthy(server.mongoose)
     t.truthy(server.services)
+
+    await t.context.setupBaseData(server)
 })
