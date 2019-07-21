@@ -1,14 +1,14 @@
 const axios = require('axios')
 
 class Request {
-    constructor(baseURL, options = {}) {
-        this.cookies = false
+    token = ''
 
+    constructor(baseURL, options = {}) {
         const args = {
             timeout: 60000,
-            headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
             maxRedirects: 0,
+            headers: this.headers,
             ...options,
         }
 
@@ -44,10 +44,36 @@ class Request {
         )
     }
 
-    async login(data) {
+    get headers() {
+        const headers = { 'Content-Type': 'application/json' }
+
+        if (this.token) {
+            headers.Authorization = `Bearer: ${this.token}`
+        }
+
+        return headers
+    }
+
+    async signup(type = 'guest', data) {
         this.logout()
 
-        const res = await this.post('/auth/guest/login', data)
+        try {
+            const res = await this.post(`/auth/${type}/signup`, data)
+
+            if (res.data.token) {
+                this.token = res.data.token
+            }
+
+            return this.token
+        } catch (error) {
+            console.log('@@error', error)
+        }
+    }
+
+    async login(type = 'guest', data) {
+        this.logout()
+
+        const res = await this.post('', data)
 
         console.log('@@res', res)
     }
@@ -57,6 +83,7 @@ class Request {
             ...options,
             data,
             method,
+            headers: this.headers,
         })
     }
 
@@ -77,7 +104,7 @@ class Request {
     }
 
     logout() {
-        this.cookies = undefined
+        this.token = ''
     }
 }
 

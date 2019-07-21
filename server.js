@@ -1,11 +1,13 @@
-const server = require('./src/server')
+const Server = require('./src/Server')
 
 const { WEB_CONCURRENCY = 1, PORT = 3000 } = process.env
 
 console.log(`Using ${WEB_CONCURRENCY} workers for web server.`)
 
 async function startServer(port = PORT) {
-    return await server(port, false)
+    const server = new Server(port)
+
+    return await server.start()
 }
 
 if (process.argv[2] === 'run') {

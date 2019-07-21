@@ -1,6 +1,6 @@
 const shortid = require('shortid')
 const stoppable = require('stoppable')
-
+const config = require('../config')
 const API = require('../API')
 const bootstrap = require('./bootstrap')
 
@@ -9,6 +9,7 @@ class Server {
     id = null
     env = null
     PORT = null
+    url = null
     server = null
     mongoose = null
     services = null
@@ -34,7 +35,7 @@ class Server {
                 this.services = services
                 this.mongoose = mongoose
                 this.models = this.mongoose.models
-
+                this.url = `${config.apiUrl}:${this.PORT}`
                 this.server = await API(this)
 
                 this.status = 'running'
@@ -56,6 +57,7 @@ class Server {
                 this.mongoose = null
                 this.services = null
                 this.server = null
+                this.url = null
                 this.status = 'idle'
 
                 return resolve(this)

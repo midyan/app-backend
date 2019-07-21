@@ -5,7 +5,7 @@ module.exports = env => {
     let sessionKey = setDefaultValue(process.env.SUP_SESSION_KEY, 'sup.dev.session')
     let sessionSecret = setDefaultValue(process.env.SUP_SESSION_SECRET, '1234')
 
-    let apiUrl = setDefaultValue(process.env.API_URL, 'http://localhost:3000')
+    let apiUrl = setDefaultValue(process.env.API_URL, 'http://localhost')
     let jwt_secret = setDefaultValue(process.env.JWT_TOKEN, 'test1234')
 
     switch (env) {

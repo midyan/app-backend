@@ -40,8 +40,8 @@ module.exports = server =>
 
             app.use(cors_middleware())
 
-            // app.use('/', require('./public')(server))
-            // app.use('/auth', require('./authentication')(server))
+            app.use('/', require('./public')(server))
+            app.use('/auth', require('./authentication')(server))
 
             app.use('*', (req, res) => {
                 res.status(404).send()
