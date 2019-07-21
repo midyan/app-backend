@@ -1,70 +1,52 @@
-const express = require('express')
-const morgan = require('morgan')
-
-const passport = require('./passport')
-const busboy = require('express-busboy')
-const helmet = require('helmet')
-
 const config = require('../config')
+const bootstrap = require('./bootstrap')
 
-const cors_middleware = require('./middlewares/cors')
-const error_middleware = require('./middlewares/error')
-const sslify_middleware = require('./middlewares/sslify')
-const webhook_raw_body = require('./middlewares/webhook-raw-body')
+const stoppable = require('stoppable')
+const API = require('./API')
 
-module.exports = (port, isBootstrapped) =>
-    new Promise(async (resolve, reject) => {
-        try {
-            if (!isBootstrapped) {
-                await require('../bootstrap')()
-            }
+class Server {
+    status = 'idle'
+    env = null
+    PORT = null
+    server = null
+    mongoose = null
+    services = null
 
-            const app = express()
+    constructor(PORT, env) {
+        this.PORT = PORT
+        this.env = env
+    }
 
-            passport.setupAll()
+    start() {
+        return new Promise(async (resolve, reject) => {
+            // bootstrap
+            // run api
 
-            app.disable('x-powered-by')
+            const { mongo, services } = await bootstrap(this.env)
 
-            app.disable('etag')
+            this.mongoose = mongo
+            this.services = services
+            this.server = await API(this.PORT)
+            this.status = 'running'
+        })
+    }
 
-            if (config.isProduction || config.isStaging || config.isTrunk) {
-                app.use(sslify_middleware())
-            } else {
-                app.use(morgan('dev'))
-                process.on('unhandledRejection', (reason, promise) =>
-                    console.log('UNHANDLED PROMISE REJECTION', reason, promise)
-                )
-            }
+    stop() {
+        return new Promise((resolve, reject) => {
+            stoppable(this.server).stop(async err => {
+                if (err) return reject(err)
 
-            app.use(webhook_raw_body())
+                console.log('Server at port', this.PORT, 'stopped')
 
-            app.use(helmet())
+                this.mongoose = null
+                this.services = null
+                this.server = null
+                this.status = 'idle'
 
-            busboy.extend(app, { upload: true })
-
-            app.use(cors_middleware())
-
-            // app.use('/api', require('./api')())
-
-            app.use('/', require('./public'))
-            app.use('/auth', require('./authentication'))
-
-            app.use('*', (req, res) => {
-                res.status(404).send()
+                return resolve()
             })
+        })
+    }
+}
 
-            app.use(error_middleware())
-
-            if (port !== undefined) {
-                const server = await app.listen(port, function() {
-                    console.info(`Web server listening at ${port}`)
-
-                    resolve(server)
-                })
-            } else {
-                resolve(app)
-            }
-        } catch (e) {
-            reject(e)
-        }
-    })
+module.exports = Server

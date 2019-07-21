@@ -1,19 +1,21 @@
-const mongoose = require('mongoose')
+const Mongoose = require('mongoose').Mongoose
 
 const config = require('../../config')
 
 module.exports = async function connection() {
-    mongoose.Promise = global.Promise
+    Mongoose.Promise = global.Promise
 
     try {
-        await mongoose.connect(config.mongo.uri, {
+        await Mongoose.connect(config.mongo.uri, {
             useNewUrlParser: true,
             autoReconnect: true,
             reconnectTries: 30,
             reconnectInterval: 1000,
         })
 
-        mongoose.set('useCreateIndex', true)
+        Mongoose.set('useCreateIndex', true)
+
+        return Mongoose
     } catch (err) {
         console.log('MongoDB Connection Error. Please make sure that MongoDB is running.', err)
 

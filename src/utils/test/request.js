@@ -47,19 +47,12 @@ class Request {
     async login(data) {
         this.logout()
 
-        const res = await this.post('/auth/local', data)
+        const res = await this.post('/auth/guest/login', data)
 
-        this.cookies = res.response.headers['set-cookie']
+        console.log('@@res', res)
     }
 
     request(method, url, data, options) {
-        if (this.cookies) {
-            options.headers = {
-                ...options.headers,
-                Cookie: this.cookies,
-            }
-        }
-
         return this.library(url, {
             ...options,
             data,

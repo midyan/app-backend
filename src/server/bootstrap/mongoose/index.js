@@ -1,13 +1,15 @@
-const loadModels = require('./loadModels')
 const connection = require('./connection')
 const testConnection = require('./test-connection')
 
+const models = require('../../../models')
 module.exports = async env => {
+    let mongo
+
     if (env === 'test') {
-        await testConnection()
+        mongo = await testConnection()
     } else {
-        await connection()
+        mongo = await connection()
     }
 
-    loadModels(env)
+    return models(mongo)
 }

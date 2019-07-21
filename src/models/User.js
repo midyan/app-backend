@@ -1,10 +1,8 @@
-const mongoose = require('mongoose')
-
 const uuidv4 = require('uuid/v4')
 
 const userUtils = require('../utils/user')
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new module.exports.mongoose.Schema({
     user_type: {
         type: String,
         enum: [
@@ -63,4 +61,4 @@ UserSchema.methods.setDefaultValues = async function() {
     }
 }
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports.mongoose.model('User', UserSchema)

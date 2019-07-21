@@ -1,4 +1,4 @@
-const bodyParser = require('body-parser')
+const bodyParser = require('express')
 
 module.exports = () => (req, res, next) => {
     const isNotApi = /^(?!\/api).*/.test(req.path)
