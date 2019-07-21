@@ -73,9 +73,17 @@ class Request {
     async login(type = 'guest', data) {
         this.logout()
 
-        const res = await this.post('', data)
+        try {
+            const res = await this.post(`/auth/${type}/login`, data)
 
-        console.log('@@res', res)
+            if (res.data.token) {
+                this.token = res.data.token
+            }
+
+            return this.token
+        } catch (error) {
+            console.log('@@error', error)
+        }
     }
 
     request(method, url, data, options) {
