@@ -1,8 +1,10 @@
 const shortid = require('shortid')
 const stoppable = require('stoppable')
-const config = require('../config')
-const API = require('../API')
+
 const bootstrap = require('./bootstrap')
+
+const API = require('../API')
+const config = require('../config')
 
 class Server {
     status = 'idle'
