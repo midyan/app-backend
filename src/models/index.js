@@ -1,6 +1,5 @@
 module.exports = function start(mongoose) {
-    return {
-        mongoose,
-        UserModel: require('./User')(mongoose),
-    }
+    require('./User')(mongoose)
+
+    return mongoose
 }

@@ -1,10 +1,12 @@
-const bootstrap = require('./bootstrap')
-
+const shortid = require('shortid')
 const stoppable = require('stoppable')
+
 const API = require('../API')
+const bootstrap = require('./bootstrap')
 
 class Server {
     status = 'idle'
+    id = null
     env = null
     PORT = null
     server = null
@@ -14,6 +16,8 @@ class Server {
     constructor(PORT, env) {
         this.env = env || 'test'
         this.PORT = PORT || this.randomPort()
+
+        this.id = shortid.generate()
     }
 
     randomPort() {
@@ -21,20 +25,21 @@ class Server {
     }
 
     start() {
+        if (this.status !== 'idle') throw new Error('Server already running')
+
         return new Promise(async (resolve, reject) => {
             try {
                 const { mongoose, services } = await bootstrap(this.env)
 
                 this.services = services
-
                 this.mongoose = mongoose
-                this.models = mongoose.models
+                this.models = this.mongoose.models
 
                 this.server = await API(this)
 
                 this.status = 'running'
 
-                resolve()
+                resolve(this)
             } catch (error) {
                 reject(error)
             }
@@ -53,7 +58,7 @@ class Server {
                 this.server = null
                 this.status = 'idle'
 
-                return resolve()
+                return resolve(this)
             })
         })
     }

@@ -1,11 +1,19 @@
 const test = require('ava')
 
+const Server = require('../Server')
+
 test.beforeEach(async t => {
     t.context = {}
-    t.context.useServer = useServer
+    t.context.getServer = getServer
     t.context.useTunnel = () => {}
 })
 
-function useServer() {}
+async function getServer(PORT) {
+    const server = new Server(PORT)
+
+    const runningServer = await server.start()
+
+    return runningServer
+}
 
 module.exports = test

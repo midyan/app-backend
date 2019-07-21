@@ -40,8 +40,8 @@ module.exports = server =>
 
             app.use(cors_middleware())
 
-            app.use('/', require('./public')(server))
-            app.use('/auth', require('./authentication')(server))
+            // app.use('/', require('./public')(server))
+            // app.use('/auth', require('./authentication')(server))
 
             app.use('*', (req, res) => {
                 res.status(404).send()
@@ -50,10 +50,10 @@ module.exports = server =>
             app.use(error_middleware())
 
             if (server.PORT !== undefined) {
-                const express = await app.listen(server.PORT, function() {
+                const express_server = await app.listen(server.PORT, function() {
                     console.info(`Web server listening at ${server.PORT}`)
 
-                    resolve(express)
+                    resolve(express_server)
                 })
             } else {
                 resolve(app)
