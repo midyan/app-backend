@@ -1,7 +1,7 @@
 const cors = require('cors')
 const { URL } = require('url')
 
-const config = require('../../../config')
+const config = require('../../config')
 
 module.exports = function cors_middleware() {
     return cors({

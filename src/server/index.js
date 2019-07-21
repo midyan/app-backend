@@ -1,8 +1,7 @@
-const config = require('../config')
 const bootstrap = require('./bootstrap')
 
 const stoppable = require('stoppable')
-const API = require('./API')
+const API = require('../API')
 
 class Server {
     status = 'idle'
@@ -13,21 +12,32 @@ class Server {
     services = null
 
     constructor(PORT, env) {
-        this.PORT = PORT
-        this.env = env
+        this.env = env || 'test'
+        this.PORT = PORT || this.randomPort()
+    }
+
+    randomPort() {
+        return 9000 + Math.round(Math.random() * 1000)
     }
 
     start() {
         return new Promise(async (resolve, reject) => {
-            // bootstrap
-            // run api
+            try {
+                const { mongoose, services } = await bootstrap(this.env)
 
-            const { mongo, services } = await bootstrap(this.env)
+                this.services = services
 
-            this.mongoose = mongo
-            this.services = services
-            this.server = await API(this.PORT)
-            this.status = 'running'
+                this.mongoose = mongoose
+                this.models = mongoose.models
+
+                this.server = await API(this)
+
+                this.status = 'running'
+
+                resolve()
+            } catch (error) {
+                reject(error)
+            }
         })
     }
 

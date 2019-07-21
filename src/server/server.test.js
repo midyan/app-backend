@@ -5,5 +5,5 @@ const Server = require('.')
 test('server', async t => {
     const sever = new Server(4000, 'test')
 
-    console.log('@@sever', sever)
+    await sever.start()
 })

@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose').Mongoose
 
-const config = require('../../config')
+const config = require('../../../config')
 
 module.exports = async function connection() {
     Mongoose.Promise = global.Promise

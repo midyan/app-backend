@@ -1,12 +1,11 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 
-const { getUserIdentity } = require('../../../utils/identity')
+const { getUserIdentity } = require('../../utils/identity')
 
-const config = require('../../../config')
+const config = require('../../config')
 
 const jwt = require('jsonwebtoken')
-const { UserModel } = require('../../../models')
 
 module.exports = {
     authFields: {
@@ -15,29 +14,29 @@ module.exports = {
     },
 }
 
-module.exports.verifyCrendentials = async function verifyCrendentials(
-    guest_unique_code,
-    guest_authentication_code,
-    cb
-) {
-    try {
-        const user = await UserModel.findOne({
-            guest_unique_code,
-            guest_authentication_code,
-        })
+module.exports.verifyCrendentials = server =>
+    async function verifyCrendentials(guest_unique_code, guest_authentication_code, cb) {
+        try {
+            const user = await server.moldels.User.findOne({
+                guest_unique_code,
+                guest_authentication_code,
+            })
 
-        if (!user) {
-            return cb(null, false, { message: 'Incorrect email or password.' })
+            if (!user) {
+                return cb(null, false, { message: 'Incorrect email or password.' })
+            }
+
+            return cb(null, user, { message: 'Logged In Successfully' })
+        } catch (error) {
+            cb(error)
         }
-
-        return cb(null, user, { message: 'Logged In Successfully' })
-    } catch (error) {
-        cb(error)
     }
-}
 
-module.exports.setup = function guestSetup() {
-    const localStrategy = new LocalStrategy(module.exports.authFields, module.exports.verifyCrendentials)
+module.exports.setup = function guestSetup(server) {
+    const localStrategy = new LocalStrategy(
+        module.exports.authFields,
+        module.exports.verifyCrendentials(server)
+    )
 
     return passport.use(localStrategy)
 }
@@ -66,9 +65,9 @@ module.exports.login = function login(req, res) {
     })
 }
 
-module.exports.signup = async function signup() {
+module.exports.signup = async function signup(req, res, server) {
     // TODO Rate limit here, because yeah
-    const user = new UserModel({ user_type: 'guest' })
+    const user = new server.models.User({ user_type: 'guest' })
 
     user.setDefaultValues()
 

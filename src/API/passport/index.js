@@ -2,9 +2,9 @@ const guest = require('./guest')
 
 const strategies = { guest }
 
-function setupAll() {
+function setupAll(server) {
     for (let strategy in strategies) {
-        strategies[strategy].setup()
+        strategies[strategy].setup(server)
     }
 }
 

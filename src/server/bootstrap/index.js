@@ -5,14 +5,14 @@ module.exports = async env => {
 
     const [
         services,
-        mongo,
-    ] = Promise.all([
+        mongoose,
+    ] = await Promise.all([
         require('./services')(config.currentEnv),
         require('./mongoose')(config.currentEnv),
     ])
 
     return {
-        mongo,
+        mongoose,
         services,
     }
 }
