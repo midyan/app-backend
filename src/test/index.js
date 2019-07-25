@@ -50,7 +50,7 @@ async function getServer(t, PORT) {
     t.truthy(runningServer.models)
     t.truthy(runningServer.mongoose)
     t.truthy(runningServer.services)
-    t.is(server.url, `${config.apiUrl}:${PORT}`)
+    t.is(server.url, `${config.apiUrl}:${PORT || server.PORT}`)
 
     return runningServer
 }
