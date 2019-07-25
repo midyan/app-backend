@@ -17,17 +17,16 @@ module.exports = {
 module.exports.verifyCrendentials = server =>
     async function verifyCrendentials(guest_unique_code, guest_authentication_code, cb) {
         try {
-            const user = await server.moldels.User.findOne({
+            const user = await server.models.User.findOne({
                 guest_unique_code,
                 guest_authentication_code,
             })
 
-            if (!user) {
-                return cb(null, false, { message: 'Incorrect email or password.' })
-            }
+            if (!user) throw new Error('Incorrect email or password.')
 
             return cb(null, user, { message: 'Logged In Successfully' })
         } catch (error) {
+            console.log('@@error', error)
             cb(error)
         }
     }
@@ -44,11 +43,12 @@ module.exports.setup = function guestSetup(server) {
 module.exports.login = function login(req, res) {
     return new Promise((resolve, reject) => {
         function doAuthentication(err, user) {
-            if (err || !user)
+            if (err || !user) {
                 return reject({
-                    message: 'Something is not right',
+                    message: 'Invalid guest_unique_code or guest_authentication_code',
                     user: user,
                 })
+            }
 
             return req.login(user, { session: false }, async err => {
                 if (err) return reject(err)

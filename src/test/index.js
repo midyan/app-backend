@@ -26,6 +26,34 @@ async function setupBaseData(t, server) {
 
     t.is(decodedToken.user_type, 'guest')
 
+    t.context.request.logout()
+
+    t.falsy(t.context.request.token)
+
+    const user = await t.context.server.models.User.findOne({ _id: decodedToken._id }).lean()
+
+    const loginToken = await t.context.request.login('guest', {
+        guest_unique_code: decodedToken.guest_unique_code,
+        guest_authentication_code: user.guest_authentication_code,
+    })
+
+    t.is(loginToken, token)
+
+    const decodedLoginToken = jwt.decode(loginToken, config.jwt_secret)
+    const uniqueLoginCode = decodedLoginToken.guest_unique_code.split('-')
+
+    t.is(loginToken.length, 285) // jwt length
+    t.is(loginToken, t.context.request.token) // jwt length
+
+    t.is(uniqueCode.length, 4)
+    t.true(uniqueLoginCode.every(segment => segment.length === 2))
+
+    t.is(decodedLoginToken.user_type, 'guest')
+
+    t.context.request.logout()
+
+    t.falsy(t.context.request.loginToken)
+
     return t.context.request
 }
 
@@ -52,6 +80,7 @@ async function getServer(t, PORT) {
     t.truthy(runningServer.services)
     t.is(server.url, `${config.apiUrl}:${PORT || server.PORT}`)
 
+    t.context.server = server
     return runningServer
 }
 
