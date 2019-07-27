@@ -15,8 +15,8 @@ module.exports = {
     },
 }
 
-module.exports.verifyCrendentials = server =>
-    async function verifyCrendentials(guest_unique_code, guest_authentication_code, cb) {
+module.exports.verify = server =>
+    async function verify(guest_unique_code, guest_authentication_code, cb) {
         try {
             const user = await server.models.User.findOne({
                 guest_unique_code,
@@ -33,10 +33,7 @@ module.exports.verifyCrendentials = server =>
     }
 
 module.exports.setup = function guestSetup(server) {
-    const localStrategy = new LocalStrategy(
-        module.exports.authFields,
-        module.exports.verifyCrendentials(server)
-    )
+    const localStrategy = new LocalStrategy(module.exports.authFields, module.exports.verify(server))
 
     return passport.use(module.exports.name, localStrategy)
 }

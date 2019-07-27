@@ -8,7 +8,7 @@ module.exports = server => {
     router.post('/guest/login', endpointWrapper(passport.guest.login, server))
     router.post('/guest/signup', endpointWrapper(passport.guest.signup, server))
 
-    router.post('/local/login', endpointWrapper(passport.local.login, server))
+    // router.post('/local/login', endpointWrapper(passport.local.login, server))
     // router.post('/local/signup', endpointWrapper(passport.local.signup, server))
 
     // router.post('/google/login', endpointWrapper(passport.google.login, server))

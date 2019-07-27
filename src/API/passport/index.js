@@ -1,10 +1,4 @@
-const guest = require('./guest')
-const local = require('./local')
-
-const strategies = {
-    guest,
-    local,
-}
+const strategies = { guest: require('./guest') }
 
 function setupAll(server) {
     for (let strategy in strategies) {
