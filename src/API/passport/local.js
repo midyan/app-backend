@@ -8,6 +8,7 @@ const config = require('../../config')
 const jwt = require('jsonwebtoken')
 
 module.exports = {
+    name: 'basic',
     authFields: {
         usernameField: 'email',
         passwordField: 'password',
@@ -40,10 +41,10 @@ module.exports.setup = function localSetup(server) {
         module.exports.verifyCrendentials(server)
     )
 
-    return passport.use(localStrategy)
+    return passport.use(module.exports.name, localStrategy)
 }
 
-module.exports.login = function login(req, res) {
+module.exports.login = function login(req, res, next) {
     return new Promise((resolve, reject) => {
         function doAuthentication(err, user) {
             if (err || !user) {
@@ -64,7 +65,11 @@ module.exports.login = function login(req, res) {
             })
         }
 
-        return passport.authenticate('local', { session: false }, doAuthentication)(req, res)
+        return passport.authenticate(module.exports.name, { session: false }, doAuthentication)(
+            req,
+            res,
+            next
+        )
     })
 }
 

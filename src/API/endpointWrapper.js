@@ -1,7 +1,7 @@
 module.exports = function endpointWrapper(fn, server) {
-    return async (req, res) => {
+    return async (req, res, next) => {
         try {
-            let result = await fn(req, res, server)
+            let result = await fn(req, res, next, server)
 
             if (typeof result !== 'object' || Array.isArray(result)) {
                 result = { data: result }
