@@ -1,2 +1,2 @@
-# recipes-app-backend
-recipes-app-backend
+# app-backend
+app-backend
