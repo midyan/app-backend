@@ -53,7 +53,7 @@
         "helmet": "^3.18.0",
         "install": "^0.12.2",
         "jsonwebtoken": "^8.5.1",
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "mongoose": "^5.6.0",
         "mongoose-dateonly": "^1.0.6",
         "morgan": "^1.9.1",
