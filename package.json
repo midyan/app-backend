@@ -52,7 +52,7 @@
         "express-sslify": "^1.2.0",
         "helmet": "^3.18.0",
         "install": "^0.12.2",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "moment": "^2.24.0",
         "mongoose": "^5.6.0",
         "mongoose-dateonly": "^1.0.6",
